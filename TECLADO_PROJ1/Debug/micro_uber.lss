@@ -1,5 +1,5 @@
 
-PROJ1.elf:     file format elf32-avr
+micro_uber.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
@@ -17,15 +17,15 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
   6 .debug_abbrev 00000c93  00000000  00000000  00001209  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_line   00000487  00000000  00000000  00001e9c  2**0
+  7 .debug_line   00000489  00000000  00000000  00001e9c  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_frame  000000cc  00000000  00000000  00002324  2**2
+  8 .debug_frame  000000cc  00000000  00000000  00002328  2**2
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_str    000005ab  00000000  00000000  000023f0  2**0
+  9 .debug_str    000005ab  00000000  00000000  000023f4  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_loc    00000229  00000000  00000000  0000299b  2**0
+ 10 .debug_loc    00000229  00000000  00000000  0000299f  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_ranges 00000038  00000000  00000000  00002bc4  2**0
+ 11 .debug_ranges 00000038  00000000  00000000  00002bc8  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -178,20 +178,20 @@ Disassembly of section .text:
 
 00000114 <main>:
 
-
 int main(){
 // para testes do teclado
+
 	char flag = 0;
 		DDRB = (1<<7);
  114:	80 e8       	ldi	r24, 0x80	; 128
  116:	84 b9       	out	0x04, r24	; 4
 		teclado_init();
  118:	17 d0       	rcall	.+46     	; 0x148 <teclado_init>
-#include "teclado.h"
 
 
 int main(){
 // para testes do teclado
+
 	char flag = 0;
  11a:	c0 e0       	ldi	r28, 0x00	; 0
 		teclado_init();
@@ -208,7 +208,7 @@ int main(){
  120:	03 c0       	rjmp	.+6      	; 0x128 <main+0x14>
  122:	cd 2f       	mov	r28, r29
  124:	01 c0       	rjmp	.+2      	; 0x128 <main+0x14>
-// para testes do teclado
+
 	char flag = 0;
 		DDRB = (1<<7);
 		teclado_init();
@@ -235,7 +235,7 @@ int BOUNCE = 8;
 
 
 void atraso_debounce(){
-	while((TIFR0 & (1 << 0)) == 0); //enquanto a flag de interrupção do timer 0 não for 1
+	while((TIFR0 & (1 << 0)) == 0); //enquanto a flag de interrupï¿½ï¿½o do timer 0 nï¿½o for 1
  13c:	a8 9b       	sbis	0x15, 0	; 21
  13e:	fe cf       	rjmp	.-4      	; 0x13c <atraso_debounce>
 	TCNT0 = 31;
@@ -250,7 +250,7 @@ void atraso_debounce(){
 
 //Inicializar teclado
 void teclado_init(){
-	TCCR0A = 0;       // configurãção do timer zero para debounce 
+	TCCR0A = 0;       // configurï¿½ï¿½ï¿½o do timer zero para debounce 
  148:	14 bc       	out	0x24, r1	; 36
 	TCCR0B = 4;
  14a:	84 e0       	ldi	r24, 0x04	; 4
@@ -265,7 +265,7 @@ void teclado_init(){
  156:	80 81       	ld	r24, Z
  158:	8f 70       	andi	r24, 0x0F	; 15
  15a:	80 83       	st	Z, r24
-	DDRK |= (1<< 0 | 1 << 1 | 1 << 2 | 1 << 3); //define PORTK como saída (linhas)
+	DDRK |= (1<< 0 | 1 << 1 | 1 << 2 | 1 << 3); //define PORTK como saï¿½da (linhas)
  15c:	80 81       	ld	r24, Z
  15e:	8f 60       	ori	r24, 0x0F	; 15
  160:	80 83       	st	Z, r24
@@ -287,7 +287,7 @@ void teclado_init(){
 00000178 <le_coluna>:
 			
 }
-//Função de debounce para leitura do teclado, a função recebe como argumento a coluna da matriz de contato
+//Funï¿½ï¿½o de debounce para leitura do teclado, a funï¿½ï¿½o recebe como argumento a coluna da matriz de contato
 char le_coluna (char pino){
  178:	ff 92       	push	r15
  17a:	0f 93       	push	r16
@@ -309,7 +309,7 @@ char le_coluna (char pino){
  18e:	ea f7       	brpl	.-6      	; 0x18a <le_coluna+0x12>
 			
 }
-//Função de debounce para leitura do teclado, a função recebe como argumento a coluna da matriz de contato
+//Funï¿½ï¿½o de debounce para leitura do teclado, a funï¿½ï¿½o recebe como argumento a coluna da matriz de contato
 char le_coluna (char pino){
 
 	char count = 0, key_last = 0, key_now = 0;

@@ -1,5 +1,7 @@
+#ifndef __AVR_ATmega2560__
+	#define __AVR_ATmega2560__
+#endif
 
-#include <avr/iom2560.h>
 #include <avr/io.h>
 #include <stdio.h>
 #include <stdlib.h>

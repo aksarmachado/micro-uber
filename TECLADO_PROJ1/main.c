@@ -5,8 +5,11 @@
  * Author : Aksa
  */ 
 
+#ifndef __AVR_ATmega2560__
+	#define __AVR_ATmega2560__
+#endif
+
 #include <avr/io.h>
-#include <avr/iom2560.h>
 #include "teclado.h"
 
 

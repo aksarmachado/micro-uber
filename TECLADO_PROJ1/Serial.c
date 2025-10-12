@@ -5,26 +5,25 @@
  *  Author: Aksa
  */ 
 //---------------FUN��ES PARA A COMUNICA��O SERIAL---------------
+#ifndef __AVR_ATmega2560__
+	#define __AVR_ATmega2560__
+#endif
 
 #include <avr/interrupt.h>
 #include <avr/io.h>
-#include <avr/iom2560.h>
 #include <stdio.h>
 #include <stdlib.h>
 
 
 //limpa o buffer de recep��o serial
-void limpa_serial()
-	{
-		char limpa_recepcao;
-		
-		while(UCSR0A & (1<<RXC0)) // limpa e descarta at� n�o ter nada na recep��o 
-		{
-			limpa_recepcao = UDR0;
-		}
-	}
+void limpa_serial()	{
+	char limpa_recepcao;
 	
-
+	while(UCSR0A & (1<<RXC0)) // limpa e descarta at� n�o ter nada na recep��o 
+	{
+		limpa_recepcao = UDR0;
+	}
+}
 
 void serial_init() {
 	
@@ -48,7 +47,7 @@ char recepcao_serial_dado_char()
 }
 
 // Fun��o que recebe um conjunto de bytes da serial, entrada � o vetor serial a ser lido e o tamanho do vetor (numero de bytes)
-char recebe_string_serial(char *dado_recebido, int tamanho)
+void recebe_string_serial(char *dado_recebido, int tamanho)
 {
 	int i;
 	
