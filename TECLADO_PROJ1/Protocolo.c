@@ -4,25 +4,26 @@
  * Created: 11/10/2025 19:22:17
  *  Author: Aksa
  */ 
+// teste de comunicaï¿½ï¿½ï¿½ï¿½o serial entre o microcontrolador e o servidor externo
 
-// mensagens de comunicação entre servidor e microcontrolador 
+// mensagens de comunicaï¿½ï¿½o entre servidor e microcontrolador 
 
-//Função para transmitir a mensagem de qual o movimento do veiculo por comunicação serial para o servidor externo
+//Funï¿½ï¿½o para transmitir a mensagem de qual o movimento do veiculo por comunicaï¿½ï¿½o serial para o servidor externo
 void Transm_mov_veiculo(char mov){
-	char envia[4]={0};		//Vetor que receberá a mensagem de qual movimento o carro terá
+	char envia[4]={0};		//Vetor que receberï¿½ a mensagem de qual movimento o carro terï¿½
 	
-	envia[0]='U';			//Mensagem para ser transmitida indicando movimentação
+	envia[0]='U';			//Mensagem para ser transmitida indicando movimentaï¿½ï¿½o
 	envia[1]='M';
 	envia[2]= mov;			//Indica qual o movimento do carro, sendo 0-parado, 1-move p/ frente, 2-vira p/ direita, 3-vira p/ esquerda
 	envia[3]='\0';
 	
-	transmite_string_serial(envia, 3);//transmite mensagem de qual o movimento o carro terá pela serial
+	transmite_string_serial(envia, 3);//transmite mensagem de qual o movimento o carro terï¿½ pela serial
 	
 }
 
-//Função para transmitir a mensagem de aceite do cliente por comunicação serial para o servidor externo(recebe o byte contendo o codigo do cliente)
+//Funï¿½ï¿½o para transmitir a mensagem de aceite do cliente por comunicaï¿½ï¿½o serial para o servidor externo(recebe o byte contendo o codigo do cliente)
 void Transm_aceita_cliente(char cliente){
-	char envia[4]={0};		//Vetor que receberá a mensagem de qual movimento o carro terá
+	char envia[4]={0};		//Vetor que receberï¿½ a mensagem de qual movimento o carro terï¿½
 	
 	envia[0]='U';			//Mensagem para ser transmitida indicando aceite de cliente
 	envia[1]='A';
