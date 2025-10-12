@@ -12,9 +12,9 @@
     <OutputFileName>$(MSBuildProjectName)</OutputFileName>
     <OutputFileExtension>.elf</OutputFileExtension>
     <OutputDirectory>$(MSBuildProjectDirectory)\$(Configuration)</OutputDirectory>
-    <AssemblyName>TECLADO_PROJ1</AssemblyName>
+    <AssemblyName>PROJ1</AssemblyName>
     <Name>micro_uber</Name>
-    <RootNamespace>TECLADO_PROJ1</RootNamespace>
+    <RootNamespace>PROJ1</RootNamespace>
     <ToolchainFlavour>Native</ToolchainFlavour>
     <KeepTimersRunning>true</KeepTimersRunning>
     <OverrideVtor>false</OverrideVtor>

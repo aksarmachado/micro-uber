@@ -177,106 +177,54 @@ Disassembly of section .text:
  112:	76 cf       	rjmp	.-276    	; 0x0 <__vectors>
 
 00000114 <main>:
-
-int main(){
-// para testes do teclado
-
-	char flag = 0;
-		DDRB = (1<<7);
  114:	80 e8       	ldi	r24, 0x80	; 128
  116:	84 b9       	out	0x04, r24	; 4
-		teclado_init();
  118:	17 d0       	rcall	.+46     	; 0x148 <teclado_init>
-
-
-int main(){
-// para testes do teclado
-
-	char flag = 0;
  11a:	c0 e0       	ldi	r28, 0x00	; 0
-		teclado_init();
-		while (1){
-		if (tecla() == '1'){
-			if (flag == 0)
-			PORTB ^= 1<<7;
-			flag = 1;
  11c:	11 e0       	ldi	r17, 0x01	; 1
-		}
-		else{
-			flag = 0;
  11e:	d0 e0       	ldi	r29, 0x00	; 0
  120:	03 c0       	rjmp	.+6      	; 0x128 <main+0x14>
  122:	cd 2f       	mov	r28, r29
  124:	01 c0       	rjmp	.+2      	; 0x128 <main+0x14>
-
-	char flag = 0;
-		DDRB = (1<<7);
-		teclado_init();
-		while (1){
-		if (tecla() == '1'){
  126:	c1 2f       	mov	r28, r17
  128:	54 d0       	rcall	.+168    	; 0x1d2 <tecla>
  12a:	81 33       	cpi	r24, 0x31	; 49
  12c:	d1 f7       	brne	.-12     	; 0x122 <main+0xe>
-			if (flag == 0)
  12e:	c1 11       	cpse	r28, r1
  130:	fa cf       	rjmp	.-12     	; 0x126 <main+0x12>
-			PORTB ^= 1<<7;
  132:	85 b1       	in	r24, 0x05	; 5
  134:	80 58       	subi	r24, 0x80	; 128
  136:	85 b9       	out	0x05, r24	; 5
-			flag = 1;
  138:	c1 2f       	mov	r28, r17
  13a:	f6 cf       	rjmp	.-20     	; 0x128 <main+0x14>
 
 0000013c <atraso_debounce>:
-
-int BOUNCE = 8;
-
-
-void atraso_debounce(){
-	while((TIFR0 & (1 << 0)) == 0); //enquanto a flag de interrup��o do timer 0 n�o for 1
  13c:	a8 9b       	sbis	0x15, 0	; 21
  13e:	fe cf       	rjmp	.-4      	; 0x13c <atraso_debounce>
-	TCNT0 = 31;
  140:	8f e1       	ldi	r24, 0x1F	; 31
  142:	86 bd       	out	0x26, r24	; 38
-	TIFR0 |= (1 << 0); // zera a flag
  144:	a8 9a       	sbi	0x15, 0	; 21
  146:	08 95       	ret
 
 00000148 <teclado_init>:
-}
-
-//Inicializar teclado
-void teclado_init(){
-	TCCR0A = 0;       // configur���o do timer zero para debounce 
  148:	14 bc       	out	0x24, r1	; 36
-	TCCR0B = 4;
  14a:	84 e0       	ldi	r24, 0x04	; 4
  14c:	85 bd       	out	0x25, r24	; 37
-	TCNT0 = 31;
  14e:	8f e1       	ldi	r24, 0x1F	; 31
  150:	86 bd       	out	0x26, r24	; 38
-	
-	DDRK &= ~(1<<7 | 1 <<6 | 1 << 5 | 1 << 4);   //define PORTK como metade entrada (colunas)
  152:	e7 e0       	ldi	r30, 0x07	; 7
  154:	f1 e0       	ldi	r31, 0x01	; 1
  156:	80 81       	ld	r24, Z
  158:	8f 70       	andi	r24, 0x0F	; 15
  15a:	80 83       	st	Z, r24
-	DDRK |= (1<< 0 | 1 << 1 | 1 << 2 | 1 << 3); //define PORTK como sa�da (linhas)
  15c:	80 81       	ld	r24, Z
  15e:	8f 60       	ori	r24, 0x0F	; 15
  160:	80 83       	st	Z, r24
-	PORTK |= (1<< 0 | 1 << 1 | 1 << 2 | 1 << 3);
  162:	e8 e0       	ldi	r30, 0x08	; 8
  164:	f1 e0       	ldi	r31, 0x01	; 1
  166:	80 81       	ld	r24, Z
  168:	8f 60       	ori	r24, 0x0F	; 15
  16a:	80 83       	st	Z, r24
-
-	PINK |= (1<< 0 | 1 << 1 | 1 << 2 | 1 << 3); //habilita pull-up nos pinos
  16c:	e6 e0       	ldi	r30, 0x06	; 6
  16e:	f1 e0       	ldi	r31, 0x01	; 1
  170:	80 81       	ld	r24, Z
@@ -285,21 +233,11 @@ void teclado_init(){
  176:	08 95       	ret
 
 00000178 <le_coluna>:
-			
-}
-//Fun��o de debounce para leitura do teclado, a fun��o recebe como argumento a coluna da matriz de contato
-char le_coluna (char pino){
  178:	ff 92       	push	r15
  17a:	0f 93       	push	r16
  17c:	1f 93       	push	r17
  17e:	cf 93       	push	r28
  180:	df 93       	push	r29
-	char count = 0, key_last = 0, key_now = 0;
-
-	while(1){
-		atraso_debounce();
-
-		key_now = PINK & (1<<(pino+4));
  182:	8c 5f       	subi	r24, 0xFC	; 252
  184:	91 e0       	ldi	r25, 0x01	; 1
  186:	f9 2e       	mov	r15, r25
@@ -307,53 +245,20 @@ char le_coluna (char pino){
  18a:	ff 0c       	add	r15, r15
  18c:	8a 95       	dec	r24
  18e:	ea f7       	brpl	.-6      	; 0x18a <le_coluna+0x12>
-			
-}
-//Fun��o de debounce para leitura do teclado, a fun��o recebe como argumento a coluna da matriz de contato
-char le_coluna (char pino){
-
-	char count = 0, key_last = 0, key_now = 0;
  190:	d0 e0       	ldi	r29, 0x00	; 0
  192:	c0 e0       	ldi	r28, 0x00	; 0
-
-	while(1){
-		atraso_debounce();
-
-		key_now = PINK & (1<<(pino+4));
  194:	06 e0       	ldi	r16, 0x06	; 6
  196:	11 e0       	ldi	r17, 0x01	; 1
-char le_coluna (char pino){
-
-	char count = 0, key_last = 0, key_now = 0;
-
-	while(1){
-		atraso_debounce();
  198:	d1 df       	rcall	.-94     	; 0x13c <atraso_debounce>
-
-		key_now = PINK & (1<<(pino+4));
  19a:	f8 01       	movw	r30, r16
  19c:	90 81       	ld	r25, Z
  19e:	9f 21       	and	r25, r15
-
-		if(key_now == key_last){count = count + 1;}
  1a0:	d9 13       	cpse	r29, r25
  1a2:	02 c0       	rjmp	.+4      	; 0x1a8 <le_coluna+0x30>
  1a4:	cf 5f       	subi	r28, 0xFF	; 255
  1a6:	01 c0       	rjmp	.+2      	; 0x1aa <le_coluna+0x32>
-		else{count = 0;}
  1a8:	c0 e0       	ldi	r28, 0x00	; 0
-	char count = 0, key_last = 0, key_now = 0;
-
-	while(1){
-		atraso_debounce();
-
-		key_now = PINK & (1<<(pino+4));
  1aa:	d9 2f       	mov	r29, r25
-
-		if(key_now == key_last){count = count + 1;}
-		else{count = 0;}
-
-		if(count == BOUNCE){
  1ac:	2c 2f       	mov	r18, r28
  1ae:	30 e0       	ldi	r19, 0x00	; 0
  1b0:	40 91 00 02 	lds	r20, 0x0200	; 0x800200 <__DATA_REGION_ORIGIN__>
@@ -365,12 +270,6 @@ char le_coluna (char pino){
  1c0:	91 11       	cpse	r25, r1
  1c2:	01 c0       	rjmp	.+2      	; 0x1c6 <le_coluna+0x4e>
  1c4:	80 e0       	ldi	r24, 0x00	; 0
-			if (key_now) return 1;
-			else return 0;
-		}
-		else{key_last = key_now;}
-	}
-}
  1c6:	df 91       	pop	r29
  1c8:	cf 91       	pop	r28
  1ca:	1f 91       	pop	r17
@@ -379,9 +278,6 @@ char le_coluna (char pino){
  1d0:	08 95       	ret
 
 000001d2 <tecla>:
-
-//Retorna tecla pressionada
-char tecla(){
  1d2:	af 92       	push	r10
  1d4:	bf 92       	push	r11
  1d6:	cf 92       	push	r12
@@ -400,9 +296,6 @@ char tecla(){
  1f0:	de bf       	out	0x3e, r29	; 62
  1f2:	0f be       	out	0x3f, r0	; 63
  1f4:	cd bf       	out	0x3d, r28	; 61
-	int linha=0, coluna=0;
-
-	char teclado [4][4] = {
  1f6:	80 e1       	ldi	r24, 0x10	; 16
  1f8:	e2 e0       	ldi	r30, 0x02	; 2
  1fa:	f2 e0       	ldi	r31, 0x02	; 2
@@ -412,35 +305,20 @@ char tecla(){
  202:	0d 92       	st	X+, r0
  204:	8a 95       	dec	r24
  206:	e1 f7       	brne	.-8      	; 0x200 <tecla+0x2e>
-		{'4', '5', '6', 'B'},
-		{'7', '8', '9', 'C'},
-		{'*', '0', '#', 'D'}
-	};
-
-	for(linha = 0; linha < 4; linha++){
  208:	e1 2c       	mov	r14, r1
  20a:	f1 2c       	mov	r15, r1
-		PORTK |= 0x0F;
  20c:	68 94       	set
  20e:	cc 24       	eor	r12, r12
  210:	c3 f8       	bld	r12, 3
  212:	dd 24       	eor	r13, r13
  214:	d3 94       	inc	r13
-		PORTK &= ~(1<<linha);//Itera as colunas do teclado
  216:	aa 24       	eor	r10, r10
  218:	a3 94       	inc	r10
  21a:	b1 2c       	mov	r11, r1
-		{'7', '8', '9', 'C'},
-		{'*', '0', '#', 'D'}
-	};
-
-	for(linha = 0; linha < 4; linha++){
-		PORTK |= 0x0F;
  21c:	f6 01       	movw	r30, r12
  21e:	80 81       	ld	r24, Z
  220:	8f 60       	ori	r24, 0x0F	; 15
  222:	80 83       	st	Z, r24
-		PORTK &= ~(1<<linha);//Itera as colunas do teclado
  224:	90 81       	ld	r25, Z
  226:	95 01       	movw	r18, r10
  228:	0e 2c       	mov	r0, r14
@@ -453,17 +331,12 @@ char tecla(){
  236:	80 95       	com	r24
  238:	89 23       	and	r24, r25
  23a:	80 83       	st	Z, r24
-		
-		for (coluna=0; coluna<3; coluna++){
  23c:	00 e0       	ldi	r16, 0x00	; 0
  23e:	10 e0       	ldi	r17, 0x00	; 0
-			if(!le_coluna(coluna)){
  240:	80 2f       	mov	r24, r16
  242:	9a df       	rcall	.-204    	; 0x178 <le_coluna>
  244:	81 11       	cpse	r24, r1
  246:	0f c0       	rjmp	.+30     	; 0x266 <tecla+0x94>
-				//while(!le_coluna(coluna));
-				return teclado[linha][coluna];
  248:	ee 0c       	add	r14, r14
  24a:	ff 1c       	adc	r15, r15
  24c:	ee 0c       	add	r14, r14
@@ -479,23 +352,11 @@ char tecla(){
  260:	f1 1f       	adc	r31, r17
  262:	80 81       	ld	r24, Z
  264:	0d c0       	rjmp	.+26     	; 0x280 <tecla+0xae>
-
-	for(linha = 0; linha < 4; linha++){
-		PORTK |= 0x0F;
-		PORTK &= ~(1<<linha);//Itera as colunas do teclado
-		
-		for (coluna=0; coluna<3; coluna++){
  266:	0f 5f       	subi	r16, 0xFF	; 255
  268:	1f 4f       	sbci	r17, 0xFF	; 255
  26a:	03 30       	cpi	r16, 0x03	; 3
  26c:	11 05       	cpc	r17, r1
  26e:	41 f7       	brne	.-48     	; 0x240 <tecla+0x6e>
-		{'4', '5', '6', 'B'},
-		{'7', '8', '9', 'C'},
-		{'*', '0', '#', 'D'}
-	};
-
-	for(linha = 0; linha < 4; linha++){
  270:	9f ef       	ldi	r25, 0xFF	; 255
  272:	e9 1a       	sub	r14, r25
  274:	f9 0a       	sbc	r15, r25
@@ -503,14 +364,7 @@ char tecla(){
  278:	ee 16       	cp	r14, r30
  27a:	f1 04       	cpc	r15, r1
  27c:	79 f6       	brne	.-98     	; 0x21c <tecla+0x4a>
-				//while(!le_coluna(coluna));
-				return teclado[linha][coluna];
-			}
-		}
-	}
-	return 0; //caso nenhuma tecla seja pressionada
  27e:	80 e0       	ldi	r24, 0x00	; 0
-}
  280:	60 96       	adiw	r28, 0x10	; 16
  282:	0f b6       	in	r0, 0x3f	; 63
  284:	f8 94       	cli
