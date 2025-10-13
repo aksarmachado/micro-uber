@@ -12,5 +12,4 @@
     "C_Cpp.clang_format_fallbackStyle": "Google",
     "C_Cpp.clang_format_style": "{ BasedOnStyle: LLVM, ColumnLimit: 120, AllowShortLoopsOnASingleLine: true }",
     "editor.formatOnSave": true,
-    "editor.formatOnType": true,
 }
