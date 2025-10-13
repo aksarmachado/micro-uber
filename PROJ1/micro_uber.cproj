@@ -148,7 +148,7 @@
     <Compile Include="tarifa.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="tarifas.c">
+    <Compile Include="tarifa.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="teclado.c">
