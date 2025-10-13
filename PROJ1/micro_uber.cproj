@@ -124,6 +124,12 @@
     <OutputFileExtension>.elf</OutputFileExtension>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="display.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="display.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="main.c">
       <SubType>compile</SubType>
     </Compile>
@@ -137,6 +143,12 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="serial.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="tarifa.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="tarifas.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="teclado.c">
