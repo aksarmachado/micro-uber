@@ -12,7 +12,6 @@ void limpa_serial();
 void serial_init();
 char recepcao_serial_dado_char();
 char recebe_string_serial(char *dado_recebido, int tamanho);
-void transmissao_serial_dado_char(char dado_transmitido);
 void transmite_string_serial(char *dado_transmitir, int tamanho);
 
 #endif /* SERIAL_H_ */

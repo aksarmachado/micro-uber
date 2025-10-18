@@ -47,9 +47,7 @@ char recepcao_serial_dado_char() {
 // Fun��o que recebe um conjunto de bytes da serial, entrada � o vetor serial a ser lido e o tamanho do vetor (numero de
 // bytes)
 void recebe_string_serial(char *dado_recebido, int tamanho) {
-  int i;
-
-  for (i = 0; i < tamanho; i++) {
+  for (int i = 0; i < tamanho; i++) {
     dado_recebido[i] = recepcao_serial_dado_char();
   }
   dado_recebido[tamanho] = '\0';
@@ -67,9 +65,7 @@ void transmissao_serial_dado_char(char dado_transmitido) {
 void transmite_string_serial(char *dado_transmitir,
                              int tamanho) // essa fun��o vai transmitir estado para display ou interface
 {
-  int i;
-
-  for (i = 0; i < tamanho; i++) {
+  for (int i = 0; i < tamanho; i++) {
     transmissao_serial_dado_char(dado_transmitir[i]);
   }
 }
