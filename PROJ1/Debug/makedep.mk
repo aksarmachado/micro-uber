@@ -10,7 +10,9 @@ protocolo.c
 
 serial.c
 
-tarifas.c
+tarifa.c
 
 teclado.c
+
+timer.c
 
