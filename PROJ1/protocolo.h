@@ -1,6 +1,6 @@
 
-#ifndef SERIAL_H_
-#define SERIAL_H_
+#ifndef PROTOCOLO_H_
+#define PROTOCOLO_H_
 
 extern char envia_conf_cliente[3] = {'U', 'E', '\0'}; // Vetor que terá a mensagem de confirmação de recebimento
                                                       // da posição do cliente e do destino
@@ -17,4 +17,4 @@ void transmite_aceita_cliente(char cliente);
 void transmite_estado_veiculo(char status_veiculo);
 void transmite_inicio_corrida(char cliente);
 
-#endif /* SERIAL_H_ */
+#endif /* PROTOCOLO_H_ */

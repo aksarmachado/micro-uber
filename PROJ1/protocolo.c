@@ -4,13 +4,8 @@
  * Created: 11/10/2025 19:22:17
  *  Author: Aksa
  */
-#ifndef __AVR_ATmega2560__
-#define __AVR_ATmega2560__
-#endif
 
-#include <avr/io.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include "serial.h"
 
 // Fun��o para transmitir a mensagem de qual o movimento do veiculo por
 // comunica��o serial para o servidor externo
