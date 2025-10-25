@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int BOUNCE = 8;
+int BOUNCE = 2; // número de leituras estáveis para considerar a tecla pressionada
 
 void atraso_debounce() {
   while ((TIFR0 & (1 << 0)) == 0); // enquanto a flag de interrup��o do timer 0 n�o for 1
@@ -71,5 +71,5 @@ char tecla() {
       }
     }
   }
-  return 0; // caso nenhuma tecla seja pressionada
+  return 'f'; // caso nenhuma tecla seja pressionada
 }
