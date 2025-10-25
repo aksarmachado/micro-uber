@@ -37,6 +37,7 @@ int main() {
 
   while (1) {
     teclaPressionada = tecla();
+    desligar_sistema();
 
     switch (estadoAtual) {
     case desligado:
@@ -107,8 +108,8 @@ void bloqueado_loop() {
   LCD_Clear();
   if (strcmp(senha_digitada, senha_op1) == 0) // Verifica se a senha digitada é a senha do operador 1
   {
-    operador_atual = 1;
-    LCD_String("Operador 1"); // Atualiza para operador 1
+    operador_atual = 1; // Atualiza para operador 1
+    LCD_String("Operador 1");
     Timer1_ms(3000);
   } else if (strcmp(senha_digitada, senha_op2) == 0) // Verifica se a senha digitada é a senha do operador 2
   {
@@ -165,4 +166,29 @@ void disponivel_loop() {
   // código para o estado disponível
   // espero receber chamdada por serial
   // aceito ou não as chamadas
+}
+
+void desligar_sistema() {
+  static float inicio = 0;
+  if (teclaPressionada == '*') {
+    if (inicio == 0) {
+      // Começa a contar o tempo no primeiro instante da pressão
+      inicio = get_elapsed_time_ms();
+    }
+
+    // Verifica há quanto tempo está pressionada
+    float tempoPressionado = get_elapsed_time_ms() - inicio;
+    if (tempoPressionado >= 4000) {
+      LCD_String_xy(1, 0, "Desligando...");
+      Timer1_ms(2000);
+      LCD_Clear();
+      estadoAtual = desligado;
+      // desligar o DISPLAY
+      inicio = 0; // Reseta o contador
+    }
+
+  } else {
+    // Soltou a tecla: reseta o contador
+    inicio = 0;
+  }
 }
