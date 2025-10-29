@@ -133,18 +133,6 @@
     <Compile Include="main.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="protocolo.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="protocolo.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="serial.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="serial.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="tarifa.h">
       <SubType>compile</SubType>
     </Compile>
@@ -157,10 +145,16 @@
     <Compile Include="teclado.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="timer.c">
+    <Compile Include="timer0_1.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="timer.h">
+    <Compile Include="timer0_1.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="timer2.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="timer2.h">
       <SubType>compile</SubType>
     </Compile>
   </ItemGroup>

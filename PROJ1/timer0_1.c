@@ -1,80 +1,11 @@
-/*
- * timer.c
- *
- * Created: 18/10/2025 19:01:59
- *  Author: Aksa
- */
-
 #ifndef __AVR_ATmega2560__
 #define __AVR_ATmega2560__
 #endif
 
-#define F_CPU 16000000
-
 #include <avr/interrupt.h>
 #include <avr/io.h>
 
-#include "timer.h"
-
-volatile float overflow_count = 0;
-
-void timer2_init() {
-  TCCR2A = 0x00;         // Configura o Timer1 em modo normal
-  TCCR2B = (1 << CS12);  // Prescaler = 256
-  TCNT2 = 0;             // Inicializa counter
-  TIMSK2 = (1 << TOIE2); // Habilita interrupção por overflow do Timer1
-  sei();                 // Habilita interrupções globais
-}
-
-ISR(TIMER2_OVF_vect) {
-  overflow_count++; // Incrementa overflow count
-}
-
-float get_elapsed_time_ms() {
-  float total_ticks;
-  float elapsed_time_ms;
-
-  // Desabilita interrupção para leitura consistente de overflow_count e TCNT1
-  int sreg = SREG;
-  cli();
-  total_ticks = (overflow_count * 65536UL) + TCNT1;
-  SREG = sreg;
-
-  // Converte para milissegundos
-  elapsed_time_ms = (total_ticks * 1000UL * 256UL) / F_CPU;
-
-  return elapsed_time_ms;
-}
-
-// GABRIEL
-
-// #include <avr/io.h>
-
-// #include "Timer.h"
-
-// Freq. UNO = 16MHz
-
-//***TIMER 0***//
-
-// Timer0_ms conta até 4 ms
-
-// Préscaler config Timer 1:
-// p=2, préscaler = 8
-// p=3, préscaler = 64
-// p=4, préscaler = 256
-// p=5, préscaler = 1024
-
-//***TIMER 1***//
-
-// Timer1_us conta até 32767 us
-// Timer1_ms conta até 1040 ms
-// Timer1 conta até 4 s
-
-// Préscaler config Timer 1:
-// p=10, préscaler = 8
-// p=11, préscaler = 64
-// p=12, préscaler = 256
-// p=13, préscaler = 1024
+#include "timer0_1.h"
 
 void config_timer0(unsigned char p) {
   TCCR0A = 2;       // Modo com Comparacão

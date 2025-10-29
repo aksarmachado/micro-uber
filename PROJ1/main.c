@@ -1,24 +1,14 @@
-/*
- * TECLADO_PROJ1.c
- *
- * Created: 10/10/2025 16:13:15
- * Author : Aksa
- */
-
 #ifndef __AVR_ATmega2560__
 #define __AVR_ATmega2560__
 #endif
 
-#define F_CPU 16000000
 #include <avr/io.h>
+#include <string.h>
 
 #include "display.h"
-#include "protocolo.h"
-#include "serial.h"
 #include "teclado.h"
-#include "timer.h"
-#include <string.h>
-#include <util/delay.h>
+#include "timer0_1.h"
+#include "timer2.h"
 
 // Variáveis globais
 enum estado { desligado = 0, bloqueado = 1, disponivel = 2, operacao = 3, movimento = 4 };
@@ -29,37 +19,6 @@ char senha_digitada[5] = {'F', 'F', 'F', 'F',
 char senha_op1[5] = "3258";      // Senha do operador 1
 char senha_op2[5] = "8741";      // Senha do operador 2
 char operador_atual = 0;         // Variável para armazenar qual operador está logado (0 - nenhum, 1 - op1, 2 - op2)
-
-int main() {
-  teclado_init();
-  timer2_init();
-  LCD_Init();
-
-  while (1) {
-    teclaPressionada = tecla();
-    desligar_sistema();
-
-    switch (estadoAtual) {
-    case desligado:
-      desligado_loop();
-      break;
-    case bloqueado:
-      bloqueado_loop();
-      break;
-    case disponivel:
-      disponivel_loop();
-      break;
-    case operacao:
-      // operacao_loop();
-      break;
-    case movimento:
-      // movimento_loop();
-      break;
-    default:
-      desligado_loop();
-    }
-  }
-}
 
 void desligado_loop() {
   static float inicio = 0;
@@ -190,5 +149,36 @@ void desligar_sistema() {
   } else {
     // Soltou a tecla: reseta o contador
     inicio = 0;
+  }
+}
+
+int main() {
+  teclado_init();
+  timer2_init();
+  LCD_Init();
+
+  while (1) {
+    teclaPressionada = tecla();
+    desligar_sistema();
+
+    switch (estadoAtual) {
+    case desligado:
+      desligado_loop();
+      break;
+    case bloqueado:
+      bloqueado_loop();
+      break;
+    case disponivel:
+      disponivel_loop();
+      break;
+    case operacao:
+      // operacao_loop();
+      break;
+    case movimento:
+      // movimento_loop();
+      break;
+    default:
+      desligado_loop();
+    }
   }
 }

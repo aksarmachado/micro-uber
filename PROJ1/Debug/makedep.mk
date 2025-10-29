@@ -6,13 +6,11 @@ display.c
 
 main.c
 
-protocolo.c
-
-serial.c
-
 tarifa.c
 
 teclado.c
 
-timer.c
+timer0_1.c
+
+timer2.c
 

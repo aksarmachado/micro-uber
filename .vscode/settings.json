@@ -8,7 +8,8 @@
         "iom1284rfr2.h": "c",
         "iom128rfr2.h": "c",
         "protocolo.h": "c",
-        "timer.h": "c"
+        "timer.h": "c",
+        "display.h": "c"
     },
     "C_Cpp.default.compilerPath": "c:\\Program Files (x86)\\Atmel\\Studio\\7.0\\toolchain\\avr8\\avr8-gnu-toolchain\\bin\\avr-gcc.exe",
     "C_Cpp.clang_format_fallbackStyle": "Google",
