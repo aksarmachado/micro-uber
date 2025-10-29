@@ -46,9 +46,14 @@ void bloqueado_loop() {
   // Senha operador1: “3258” pode mudar configurações do sistema
   // Senha operador2: “8741”
   static int digitos = 0;
+  static uint8_t primeira_vez = 1;
 
-  LCD_Clear();
-  LCD_String("Digite a senha:");
+  if (primeira_vez) {
+    LCD_Clear();
+    LCD_String("Digite a senha:");
+    primeira_vez = 0;
+  }
+
   for (int i = 0; i < digitos; i++) {
     LCD_String_xy(1, i, "*"); // Para cada dígito, mascara com * na tela
   }
@@ -70,12 +75,12 @@ void bloqueado_loop() {
   {
     operador_atual = 1; // Atualiza para operador 1
     LCD_String("Operador 1");
-    Timer1_ms(3000);
+    Timer1_ms(2000);
   } else if (strcmp(senha_digitada, senha_op2) == 0) // Verifica se a senha digitada é a senha do operador 2
   {
     operador_atual = 2; // Atualiza para operador 2
     LCD_String("Operador 2");
-    Timer1_ms(3000);
+    Timer1_ms(2000);
   } else {
     LCD_Clear();
     LCD_String("Acesso invalido");
@@ -85,6 +90,7 @@ void bloqueado_loop() {
     Timer1_ms(2000);
     LCD_Clear();
 
+    primeira_vez = 1;
     digitos = 0; // Reseta o contador de dígitos para nova tentativa
     // Limpa o vetor de senha digitada para uma que possa ser inserida uma senha válida
     senha_digitada[0] = 'F';
@@ -98,24 +104,24 @@ void bloqueado_loop() {
   // Se a senha estiver correta, desbloqueia o sistema
   LCD_Clear();
   LCD_String("Senha correta");
-  Timer1_ms(1500);
+  Timer1_ms(2000);
   LCD_Clear();
   LCD_String("Desbloqueado");
-  Timer1_ms(1500);
+  Timer1_ms(2000);
   LCD_Clear();
   LCD_String("Uber DeLEats");
-  Timer1_ms(1500);
+  Timer1_ms(2000);
   LCD_Clear();
 
   if (operador_atual == 1) // Se for a senha do operador 1
   {
     LCD_String("Operador 1");
-    Timer1_ms(1500);
+    Timer1_ms(2000);
     // Transm_estado_veiculo('1'); // Transmite mensagem serial de estado do carro como disponivel (1)
   } else if (operador_atual == 2) // Se for a senha do operador 2
   {
     LCD_String("Operador 2");
-    Timer1_ms(1500);
+    Timer1_ms(2000);
     // Transm_estado_veiculo('1'); // Transmite mensagem serial de estado do carro como disponivel (1)
   }
 
