@@ -2,39 +2,38 @@
 #define __AVR_ATmega2560__
 #endif
 
-#define F_CPU 16000000
+#define F_CPU 16000000UL
 
 #include <avr/interrupt.h>
 #include <avr/io.h>
 
 #include "timer2.h"
 
-volatile float overflow_count = 0;
+volatile unsigned long overflow_count = 0;
 
 void timer2_init() {
-  TCCR2A = 0x00;         // Configura o Timer1 em modo normal
-  TCCR2B = (1 << CS12);  // Prescaler = 256
-  TCNT2 = 0;             // Inicializa counter
-  TIMSK2 = (1 << TOIE2); // Habilita interrupção por overflow do Timer1
-  sei();                 // Habilita interrupções globais
+  TCCR2A = 0x00;                      // Modo normal
+  TCCR2B = (1 << CS22) | (1 << CS21); // Prescaler = 256
+  TCNT2 = 0;                          // Zera contador
+  TIMSK2 = (1 << TOIE2);              // Habilita interrupção de overflow
+  sei();                              // Habilita interrupções globais
 }
 
-ISR(TIMER2_OVF_vect) {
-  overflow_count++; // Incrementa overflow count
-}
+ISR(TIMER2_OVF_vect) { overflow_count++; }
 
 float get_elapsed_time_ms() {
-  float total_ticks;
+  unsigned long total_ticks;
   float elapsed_time_ms;
 
-  // Desabilita interrupção para leitura consistente de overflow_count e TCNT1
-  int sreg = SREG;
+  // Protege leitura
+  unsigned int sreg = SREG;
   cli();
-  total_ticks = (overflow_count * 65536UL) + TCNT1;
+  total_ticks = (overflow_count * 256UL) + TCNT2;
   SREG = sreg;
 
-  // Converte para milissegundos
-  elapsed_time_ms = (total_ticks * 1000UL * 256UL) / F_CPU;
+  // Cada tick = (prescaler / F_CPU) segundos
+  // => tempo(ms) = ticks * prescaler * 1000 / F_CPU
+  elapsed_time_ms = (total_ticks * 256.0 * 1000.0) / F_CPU;
 
   return elapsed_time_ms;
 }
