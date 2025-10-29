@@ -6,19 +6,19 @@
 #include <string.h>
 
 #include "display.h"
+#include "operacao.h"
 #include "teclado.h"
 #include "timer0_1.h"
 #include "timer2.h"
 
 // Variáveis globais
-enum estado { desligado = 0, bloqueado = 1, disponivel = 2, operacao = 3, movimento = 4 };
+enum estado { desligado = 0, bloqueado = 1, operacao = 2 };
 enum estado estadoAtual = desligado; // estado inicial desligado
 char teclaPressionada;
-char senha_digitada[5] = {'F', 'F', 'F', 'F',
-                          '\0'}; // O vetor que receberá a senha digitada já é instanciado para evitar lixo de memória
-char senha_op1[5] = "3258";      // Senha do operador 1
-char senha_op2[5] = "8741";      // Senha do operador 2
-char operador_atual = 0;         // Variável para armazenar qual operador está logado (0 - nenhum, 1 - op1, 2 - op2)
+char senha_digitada[5] = {'F', 'F', 'F', 'F', '\0'}; // O vetor já é instanciado para evitar lixo de memória
+char senha_op1[5] = "3258";                          // Senha do operador 1
+char senha_op2[5] = "8741";                          // Senha do operador 2
+char operador_atual = 0; // Variável para armazenar qual operador está logado (0 - nenhum, 1 - op1, 2 - op2)
 
 void desligado_loop() {
   static float inicio = 0;
@@ -118,13 +118,7 @@ void bloqueado_loop() {
     // Transm_estado_veiculo('1'); // Transmite mensagem serial de estado do carro como disponivel (1)
   }
 
-  estadoAtual = disponivel; // Atualiza para sistema desbloqueado
-}
-
-void disponivel_loop() {
-  // código para o estado disponível
-  // espero receber chamdada por serial
-  // aceito ou não as chamadas
+  estadoAtual = operacao; // Atualiza para sistema desbloqueado
 }
 
 void desligar_sistema() {
@@ -157,7 +151,8 @@ int main() {
   timer2_init();
   LCD_Init();
 
-  while (1) {
+  int fora_de_operacao = 1;
+  while (fora_de_operacao) {
     teclaPressionada = tecla();
     desligar_sistema();
 
@@ -168,17 +163,13 @@ int main() {
     case bloqueado:
       bloqueado_loop();
       break;
-    case disponivel:
-      disponivel_loop();
-      break;
     case operacao:
-      // operacao_loop();
-      break;
-    case movimento:
-      // movimento_loop();
+      fora_de_operacao = 0;
       break;
     default:
       desligado_loop();
     }
   }
+
+  return operacao_loop();
 }

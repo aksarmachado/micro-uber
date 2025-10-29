@@ -124,6 +124,12 @@
     <OutputFileExtension>.elf</OutputFileExtension>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="operacao.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="operacao.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="display.c">
       <SubType>compile</SubType>
     </Compile>
