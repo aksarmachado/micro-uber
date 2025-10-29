@@ -13,7 +13,9 @@
         "stdlib.h": "c",
         "timer2.h": "c",
         "timer0_1.h": "c",
-        "operacao.h": "c"
+        "operacao.h": "c",
+        "string.h": "c",
+        "estados.h": "c"
     },
     "C_Cpp.default.compilerPath": "c:\\Program Files (x86)\\Atmel\\Studio\\7.0\\toolchain\\avr8\\avr8-gnu-toolchain\\bin\\avr-gcc.exe",
     "C_Cpp.clang_format_fallbackStyle": "Google",

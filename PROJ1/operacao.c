@@ -8,7 +8,9 @@
 #include <stdio.h> // importante para sprintf
 #include <stdlib.h>
 
+#include "desligar.h"
 #include "display.h"
+#include "estados.h"
 #include "teclado.h"
 #include "timer0_1.h"
 
@@ -85,7 +87,7 @@ int decidirMovimento(int x_moto, int y_moto, int x_col, int y_col) {
   return direcao_motoqueiro;
 }
 
-int tecla_pressionada;
+char tecla_pressionada;
 
 int msg_pronta = 0, msg_data_hora = 0, disponivel_coleta = 0, aceita_pedido = 0, indisponivel = 0, valida_posicao = 0,
     habilita_dir_teclado;
@@ -502,16 +504,11 @@ ISR(USART0_RX_vect) {
   }
 }
 
-int operacao_loop() {
+enum estado operacao_loop() {
   char texto_1[10]; // buffer para armazenar o n�mero convertido
-
-  //   sei(); // Habilita interrup��es globais // JA HABILITADO NA MAIN
+  enum estado estadoAtual = operacao;
 
   uart_init();
-  //   teclado_init(); // JA HABILITADO NA MAIN
-  //   LCD_Init(); // JA HABILITADO NA MAIN
-
-  // LCD_String("Digite a senha:");
 
   while (1) {
 
@@ -553,6 +550,10 @@ int operacao_loop() {
     }
 
     tecla_pressionada = tecla();
+    estadoAtual = desligar_sistema(estadoAtual, tecla_pressionada);
+    if (estadoAtual != operacao) {
+      return estadoAtual;
+    }
 
     if (habilita_dir_teclado) {
       tecla_pressionada = tecla();

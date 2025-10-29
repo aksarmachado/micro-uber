@@ -6,6 +6,8 @@ operacao.c
 
 display.c
 
+desligar.c
+
 main.c
 
 tarifa.c

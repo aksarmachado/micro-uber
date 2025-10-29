@@ -136,6 +136,15 @@
     <Compile Include="display.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="desligar.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="desligar.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="estados.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="main.c">
       <SubType>compile</SubType>
     </Compile>
