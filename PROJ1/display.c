@@ -6,13 +6,16 @@
 
 #include <avr/io.h> /* Include AVR std. library file */
 
-#define LCD_Data_Dir DDRA      /* Define LCD data port direction */
-#define LCD_Command_Dir DDRF   /* Define LCD command port direction register */
-#define LCD_Data_Port PORTA    /* Define LCD data port */
-#define LCD_Command_Port PORTF /* Define LCD data port */
-#define RS PF2                 /* Define Register Select (data/command reg.)pin */
-#define RW PF1                 /* Define Read/Write signal pin */
-#define EN PF3                 /* Define Enable signal pin */
+#define LCD_Data_Dir DDRA        /* Define LCD data port direction */
+#define LCD_Command_Dir DDRF     /* Define LCD command port direction register */
+#define LCD_Data_Port PORTA      /* Define LCD data port */
+#define LCD_Command_Port PORTF   /* Define LCD data port */
+#define LCD_Backlight_Dir DDRF   /* Define LCD backlight port direction */
+#define LCD_Backlight_Port PORTF /* Define LCD backlight port */
+#define LCD_Backlight_Pin PF4    /* Define LCD backlight pin */
+#define RS PF2                   /* Define Register Select (data/command reg.)pin */
+#define RW PF1                   /* Define Read/Write signal pin */
+#define EN PF3                   /* Define Enable signal pin */
 
 #include <avr/interrupt.h>
 
@@ -43,16 +46,23 @@ void LCD_Char(unsigned char char_data) /* LCD data write function */
 
 void LCD_Init(void) /* LCD Initialize function */
 {
-  LCD_Command_Dir = 0xFF; /* Make LCD command port direction as o/p */
-  LCD_Data_Dir = 0xFF;    /* Make LCD data port direction as o/p */
-  //_delay_ms(20);			/* LCD Power ON delay always >15ms */
-  Timer1_ms(20);
+  LCD_Command_Dir = 0xFF;                         /* Make LCD command port direction as o/p */
+  LCD_Data_Dir = 0xFF;                            /* Make LCD data port direction as o/p */
+  LCD_Backlight_Dir |= (1 << LCD_Backlight_Pin);  // Define como saída
+  LCD_Backlight_Port |= (1 << LCD_Backlight_Pin); // Liga o backlight
 
+  Timer1_ms(20);
   LCD_Command(0x38); /* Initialization of 16X2 LCD in 8bit mode */
   LCD_Command(0x0C); /* Display ON Cursor OFF */
   LCD_Command(0x06); /* Auto Increment cursor */
   LCD_Command(0x01); /* Clear display */
   LCD_Command(0x80); /* Cursor at home position */
+}
+
+// Turn off lighting of LCD
+void LCD_Off() {
+  LCD_Backlight_Port &= ~(1 << LCD_Backlight_Pin); // Desliga o backlight
+  LCD_Command(0x08);                               // Opcional: Display OFF (sem apagar dados)
 }
 
 void LCD_String(char *str) /* Send string to LCD function */

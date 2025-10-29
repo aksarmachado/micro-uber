@@ -32,6 +32,7 @@ void desligado_loop() {
     float tempoPressionado = get_elapsed_time_ms() - inicio;
     if (tempoPressionado >= 3000) {
       estadoAtual = bloqueado;
+      LCD_Init(); // Liga o DISPLAY
       inicio = 0; // Reseta o contador
     }
 
@@ -135,6 +136,7 @@ void desligar_sistema() {
       LCD_String_xy(1, 0, "Desligando...");
       Timer1_ms(2000);
       LCD_Clear();
+      LCD_Off();
       estadoAtual = desligado;
       // desligar o DISPLAY
       inicio = 0; // Reseta o contador
@@ -149,7 +151,6 @@ void desligar_sistema() {
 int main() {
   teclado_init();
   timer2_init();
-  LCD_Init();
 
   int fora_de_operacao = 1;
   while (fora_de_operacao) {
