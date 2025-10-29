@@ -8,6 +8,7 @@
 #include <stdio.h> // importante para sprintf
 #include <stdlib.h>
 
+#include "display.h"
 #include "teclado.h"
 #include "timer0_1.h"
 
