@@ -3,7 +3,6 @@
 #endif
 
 #include "timer0_1.h"
-// #include "Timers.h"
 
 #include <avr/io.h> /* Include AVR std. library file */
 

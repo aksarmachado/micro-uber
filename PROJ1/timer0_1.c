@@ -7,6 +7,24 @@
 
 #include "timer0_1.h"
 
+//***TIMER 0***//
+
+// Timer0_ms conta at� 4 ms
+
+// Pr�scaler config Timer 1:
+// p=4, pr�scaler = 256
+
+//***TIMER 1***//
+
+// Timer1_us conta at� 32767 us
+// Timer1_ms conta at� 1040 ms
+// Timer1 conta at� 4 s
+
+// Pr�scaler config Timer 1:
+// p=10, pr�scaler = 8
+// p=12, pr�scaler = 256
+// p=13, pr�scaler = 1024
+
 void config_timer0(unsigned char p) {
   TCCR0A = 2;       // Modo com Comparacão
   TCCR0B = p;       // préscaler config
