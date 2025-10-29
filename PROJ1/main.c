@@ -166,8 +166,6 @@ int main() {
     case operacao:
       fora_de_operacao = 0;
       break;
-    default:
-      desligado_loop();
     }
   }
 
