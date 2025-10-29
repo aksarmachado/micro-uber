@@ -10,7 +10,7 @@ int BOUNCE = 8; // número de leituras estáveis para considerar a tecla pressio
 
 void atraso_debounce() {
   while ((TIFR0 & (1 << 0)) == 0); // enquanto a flag de interrup��o do timer 0 n�o for 1
-  TCNT0 = 31;
+  TCNT0 = 0;
   TIFR0 |= (1 << 0); // zera a flag
 }
 
@@ -18,7 +18,7 @@ void atraso_debounce() {
 void teclado_init() {
   TCCR0A = 0; // configur���o do timer zero para debounce
   TCCR0B = 4;
-  TCNT0 = 31;
+  TCNT0 = 0;
 
   DDRK &= ~(1 << 7 | 1 << 6 | 1 << 5 | 1 << 4); // define PORTK como metade entrada (colunas)
   DDRK |= (1 << 0 | 1 << 1 | 1 << 2 | 1 << 3);  // define PORTK como sa�da (linhas)
@@ -38,7 +38,7 @@ char le_coluna(char pino) {
     key_now = PINK & (1 << (pino + 4));
 
     if (key_now == key_last) {
-      count = count + 1;
+      count++;
     } else {
       count = 0;
     }
