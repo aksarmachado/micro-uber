@@ -16,8 +16,8 @@ operacao.d operacao.o: .././operacao.c \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stdarg.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stddef.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\stdlib.h \
- .././desligar.h .././display.h .././estados.h .././teclado.h \
- .././timer0_1.h
+ .././desligar.h .././display.h .././estados.h .././tarifa.h \
+ .././teclado.h .././timer0_1.h .././timer2.h
 
 c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\interrupt.h:
 
@@ -59,6 +59,10 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\
 
 .././estados.h:
 
+.././tarifa.h:
+
 .././teclado.h:
 
 .././timer0_1.h:
+
+.././timer2.h:

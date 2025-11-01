@@ -6,29 +6,28 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int BOUNCE = 8; // número de leituras estáveis para considerar a tecla pressionada
+int BOUNCE = 6; // número de leituras estáveis para considerar a tecla pressionada
 
 void atraso_debounce() {
-  while ((TIFR0 & (1 << 0)) == 0); // enquanto a flag de interrup��o do timer 0 n�o for 1
+  while ((TIFR0 & (1 << 0)) == 0); // enquanto a flag de interrupcao do timer 0 nao for 1
   TCNT0 = 0;
   TIFR0 |= (1 << 0); // zera a flag
 }
 
 // Inicializar teclado
 void teclado_init() {
-  TCCR0A = 0; // configur���o do timer zero para debounce
+  TCCR0A = 0; // configuracao do timer zero para debounce
   TCCR0B = 4;
   TCNT0 = 0;
 
   DDRK &= ~(1 << 7 | 1 << 6 | 1 << 5 | 1 << 4); // define PORTK como metade entrada (colunas)
-  DDRK |= (1 << 0 | 1 << 1 | 1 << 2 | 1 << 3);  // define PORTK como sa�da (linhas)
+  DDRK |= (1 << 0 | 1 << 1 | 1 << 2 | 1 << 3);  // define PORTK como saida (linhas)
   PORTK |= (1 << 0 | 1 << 1 | 1 << 2 | 1 << 3);
 
   PINK |= (1 << 0 | 1 << 1 | 1 << 2 | 1 << 3); // habilita pull-up nos pinos
 }
 
-// Fun��o de debounce para leitura do teclado, a fun��o recebe como argumento a
-// coluna da matriz de contato
+// Funcao de debounce para leitura do teclado, a funcao recebe como argumento a coluna da matriz de contato
 char le_coluna(char pino) {
   char count = 0, key_last = 0, key_now = 0;
 
@@ -62,14 +61,15 @@ char tecla() {
 
   for (linha = 0; linha < 4; linha++) {
     PORTK |= 0x0F;
-    PORTK &= ~(1 << linha); // Itera as colunas do teclado
+    PORTK &= ~(1 << linha);
 
+    // Itera as colunas do teclado
     for (coluna = 0; coluna < 3; coluna++) {
       if (!le_coluna(coluna)) {
-        // while(!le_coluna(coluna));
         return teclado[linha][coluna];
       }
     }
   }
-  return 'f'; // caso nenhuma tecla seja pressionada
+  // Caso nenhuma tecla seja pressionada, retorne 'f'
+  return 'f';
 }

@@ -3,4 +3,4 @@
 
 enum estado operacao_loop();
 
-#endif /* OPERACAO_H_ */
+#endif

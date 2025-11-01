@@ -1,10 +1,10 @@
-
 #include "desligar.h"
 #include "display.h"
 #include "estados.h"
 #include "timer0_1.h"
 #include "timer2.h"
 
+// Função para desligar o sistema
 enum estado desligar_sistema(enum estado estadoAtual, char teclaPressionada) {
   static float inicio = 0;
   if (teclaPressionada == '*') {
@@ -18,7 +18,7 @@ enum estado desligar_sistema(enum estado estadoAtual, char teclaPressionada) {
     if (tempoPressionado >= 4000) {
       LCD_Clear();
       LCD_String("Desligando...");
-      Timer1_ms(2000);
+      Timer1(2);
       LCD_Clear();
       LCD_Off();
       inicio = 0; // Reseta o contador

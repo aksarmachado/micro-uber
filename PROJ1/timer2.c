@@ -2,7 +2,7 @@
 #define __AVR_ATmega2560__
 #endif
 
-#define F_CPU 16000000UL
+#define F_CPU 16000000UL // Define a frequencia do clock do microcontrolador
 
 #include <avr/interrupt.h>
 #include <avr/io.h>
@@ -21,6 +21,7 @@ void timer2_init() {
 
 ISR(TIMER2_OVF_vect) { overflow_count++; }
 
+// Função para obter o tempo decorrido em milissegundos desde a inicialização do timer
 float get_elapsed_time_ms() {
   unsigned long total_ticks;
   float elapsed_time_ms;

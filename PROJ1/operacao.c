@@ -11,10 +11,14 @@
 #include "desligar.h"
 #include "display.h"
 #include "estados.h"
+#include "tarifa.h"
 #include "teclado.h"
 #include "timer0_1.h"
+#include "timer2.h"
 
 unsigned char id_cliente = 0, novo_cliente = 0;
+
+int comeco = 0;
 
 unsigned char posx_entregador[2], posy_entregador[2];
 unsigned char posx_coleta[2], posy_coleta[2];
@@ -29,6 +33,8 @@ unsigned int indice = 0, dif_x_entregador = 0, dif_y_entregador = 0, dif_x_colet
 unsigned int esq_x_entregador = 0, esq_y_entregador = 0, esq_x_coleta = 0, esq_y_coleta = 0, esq_x_entrega = 0,
              esq_y_entrega = 0;
 
+int dist_total = 0, recebe_pedido = 0;
+
 unsigned char data[2];
 unsigned char hora[2];
 
@@ -41,7 +47,7 @@ int pedido_coletado = 0, pedido_coletado_1 = 0, pedido_entregue = 0, pedido_fina
 
 int entra_uma_vez_1 = 1, entra_uma_vez_2 = 1, entra_uma_vez_3 = 1;
 
-int direcao_motoqueiro = 1; //{1, 2, 3, 4}; // 1 - Frente, 2 - Tr�s, 3 - Direita e 4 - Esquerda
+char orientacao_motoqueiro = 'N'; //{'N', 'S', 'L', 'O'}; // 'N' - Norte, 'S' - Sul, 'L' - Leste e 'O' - Oeste
 
 int esquinas[9][2] = {{620, 680},   {1220, 680}, {1820, 680},  {620, 1360}, {1220, 1360},
                       {1820, 1360}, {620, 2040}, {1220, 2040}, {1820, 2040}};
@@ -60,32 +66,6 @@ int indiceMaisProximo(int x, int y) {
 }
 
 // int siga_em_frente = 0, virar_esquerda = 0, virar_direita = 0, meia_volta = 0;
-
-int decidirMovimento(int x_moto, int y_moto, int x_col, int y_col) {
-  // int siga_em_frente = 0, virar_esquerda = 0, virar_direita = 0, meia_volta = 0;
-
-  if (y_moto > y_col)
-    // siga_em_frente = 1;
-    direcao_motoqueiro = 1;
-  else
-    direcao_motoqueiro = 2;
-  // meia_volta = 1;
-
-  if (x_col < x_moto)
-    // virar_esquerda = 1;
-    direcao_motoqueiro = 4;
-  else if (x_col > x_moto)
-    // virar_direita = 1;
-    direcao_motoqueiro = 3;
-
-  // Exemplo de uso
-  // if (siga_em_frente) printf("Siga em frente\n");
-  // if (meia_volta)     printf("D� meia volta\n");
-  // if (virar_esquerda) printf("Vire � esquerda\n");
-  // if (virar_direita)  printf("Vire � direita\n");
-
-  return direcao_motoqueiro;
-}
 
 char tecla_pressionada;
 
@@ -338,6 +318,7 @@ void direcoes(int a, int b) { // Calculo das distancias envolvidas e dire��o
 
   if (pedido_coletado) {
     pedido_coletado = 0;
+    comeco = get_elapsed_time_ms();
 
     LCD_Clear();
     LCD_String("Pedido coletado!");
@@ -346,9 +327,18 @@ void direcoes(int a, int b) { // Calculo das distancias envolvidas e dire��o
   } else if (pedido_entregue) {
     pedido_entregue = 0;
 
+    pos_x_y();
+    char tarifa_f[8];
+    float tempo_corrida_ms = get_elapsed_time_ms() - comeco;
+    float tempo_corrida = tempo_corrida_ms / 1000.0f;
+
     LCD_Clear();
     LCD_String("Pedido entregue!");
-    // while(pedido_finalizado); //Retirar ou nao, eis a questao //retirado, respondida a questao
+    float tarifa_final_1 = tarifa_final(dist_total, tempo_corrida);
+    LCD_Command(0xC0);
+    dtostrf(tarifa_final_1, 5, 2, tarifa_f);
+    LCD_String("Recebido:R$");
+    LCD_String(tarifa_f);
   }
 }
 
@@ -370,15 +360,27 @@ void negar_coleta() {
   if (aceita_pedido) {
     LCD_Clear();
     LCD_String("Sem sucesso");
+    Timer1(2);
+    LCD_Clear();
+    LCD_String("Aguarde...");
   }
 }
 
 void cliente_novo() {
-  envia2bytes('U', 'E');
+  char tarifa[8];
 
+  envia2bytes('U', 'E');
+  pos_x_y();
   LCD_Clear();
 
   LCD_String("Novo pedido: ");
+  Timer1(2);
+  LCD_Clear();
+  LCD_String("R$ ");
+  dist_total = abs(x_entrega - x_coleta) + abs(y_entrega - y_coleta);
+  float tarifa_1 = tarifa_final(dist_total, 100);
+  dtostrf(tarifa_1, 5, 2, tarifa);
+  LCD_String(tarifa);
   LCD_Command(0xC0);
   LCD_String("Aceitar 1-S  2-N");
 
@@ -391,6 +393,9 @@ void cliente_novo() {
     } else if (tecla_pressionada == '2') {
       LCD_Clear();
       LCD_String("Pedido rejeitado");
+      Timer1(2);
+      LCD_Clear();
+      LCD_String("Aguarde...");
     }
   }
 }
@@ -409,6 +414,7 @@ ISR(USART0_RX_vect) {
   case 1: // Espera 'P'
     if (dado == 'P') {
       pedido_finalizado = 0;
+      recebe_pedido = 1;
       estado = 2;
       contador = 0;
     } else if (dado == 'H') {
@@ -524,10 +530,11 @@ enum estado operacao_loop() {
 
       pos_x_y();
 
-      if (!pedido_coletado && !pedido_finalizado)
+      if (!pedido_coletado && !pedido_finalizado) {
         direcoes(y, y_coleta);
-      if (!entra_uma_vez_1 && !pedido_entregue && !pedido_finalizado)
+      } else if (!entra_uma_vez_1 && !pedido_entregue && !pedido_finalizado) {
         direcoes(y, y_entrega);
+      }
     }
 
     if (msg_data_hora) {
@@ -561,18 +568,18 @@ enum estado operacao_loop() {
       switch (tecla_pressionada) {
       case '2':
         enviamov(2);
-        direcao_motoqueiro = 1;
+        orientacao_motoqueiro = 'N';
         break;
       case '5':
         enviamov(1);
         break;
       case '6':
         enviamov(3);
-        direcao_motoqueiro = 3;
+        orientacao_motoqueiro = 'L';
         break;
       case '4':
         enviamov(4);
-        direcao_motoqueiro = 4;
+        orientacao_motoqueiro = 'O';
         break;
       }
     }

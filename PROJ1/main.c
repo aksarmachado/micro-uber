@@ -1,3 +1,6 @@
+// AKSA MACHADO E GABRIEL SANTOS - MICRO UBER DELEATS
+// LINK DO YT https://youtu.be/Goch0cS8YyE?si=tXvQrjYpht2zJyuE
+
 #ifndef __AVR_ATmega2560__
 #define __AVR_ATmega2560__
 #endif
@@ -21,6 +24,7 @@ char senha_op1[5] = "3258";                          // Senha do operador 1
 char senha_op2[5] = "8741";                          // Senha do operador 2
 char operador_atual = 0; // Variável para armazenar qual operador está logado (0 - nenhum, 1 - op1, 2 - op2)
 
+// Loop do estado desligado
 void desligado_loop() {
   static float inicio = 0;
   if (teclaPressionada == '#') {
@@ -44,7 +48,7 @@ void desligado_loop() {
 }
 
 void bloqueado_loop() {
-  // Senha operador1: “3258” pode mudar configurações do sistema
+  // Senha operador1: “3258”
   // Senha operador2: “8741”
   static int digitos = 0;
   static uint8_t primeira_vez = 1;
@@ -52,7 +56,6 @@ void bloqueado_loop() {
   if (primeira_vez) {
     LCD_Clear();
     LCD_String("Digite a senha:");
-    primeira_vez = 0;
   }
 
   for (int i = 0; i < digitos; i++) {
@@ -81,14 +84,14 @@ void bloqueado_loop() {
   } else {
     LCD_Clear();
     LCD_String("Acesso invalido");
-    Timer1_ms(2000);
+    Timer1(2);
     LCD_Clear();
     LCD_String("Tente novamente");
-    Timer1_ms(2000);
+    Timer1(2);
     LCD_Clear();
 
-    primeira_vez = 1;
-    digitos = 0; // Reseta o contador de dígitos para nova tentativa
+    primeira_vez = 1; // Reseta para a próxima tentativa
+    digitos = 0;      // Reseta o contador de dígitos para nova tentativa
     // Limpa o vetor de senha digitada para uma que possa ser inserida uma senha válida
     senha_digitada[0] = 'F';
     senha_digitada[1] = 'F';
@@ -100,21 +103,20 @@ void bloqueado_loop() {
 
   LCD_Clear();
   LCD_String("Desbloqueando");
-  Timer1_ms(2000);
+  Timer1(2);
   LCD_Clear();
   LCD_String("Uber DeLEats");
-  Timer1_ms(2000);
+  Timer1(2);
 
   LCD_Clear();
   if (operador_atual == 1) // Se for a senha do operador 1
   {
     LCD_String("Operador 1");
-    Timer1_ms(2000);
   } else if (operador_atual == 2) // Se for a senha do operador 2
   {
     LCD_String("Operador 2");
-    Timer1_ms(2000);
   }
+  Timer1(1);
 
   // Limpa variáveis para próxima utilização
   primeira_vez = 1;
@@ -134,6 +136,7 @@ int main() {
 
   while (1) {
     teclaPressionada = tecla();
+    // A cada loop, verifica se deve desligar o sistema
     estadoAtual = desligar_sistema(estadoAtual, teclaPressionada);
 
     switch (estadoAtual) {
@@ -144,6 +147,7 @@ int main() {
       bloqueado_loop();
       break;
     case operacao:
+      // O estado de operação é o principal do sistema e roda em loop até mudar de estado
       estadoAtual = operacao_loop();
       break;
     }

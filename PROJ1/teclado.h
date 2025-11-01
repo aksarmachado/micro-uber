@@ -4,4 +4,4 @@
 void teclado_init();
 char tecla();
 
-#endif /* TECLADO_H_ */
+#endif

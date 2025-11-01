@@ -8,4 +8,4 @@ void LCD_String(char *str);
 void LCD_String_xy(char row, char pos, char *str);
 void LCD_Clear();
 
-#endif /* DISPLAY_H_ */
+#endif
